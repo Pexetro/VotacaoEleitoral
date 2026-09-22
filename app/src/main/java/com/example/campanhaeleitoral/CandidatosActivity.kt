@@ -15,7 +15,7 @@ class CandidatosActivity : AppCompatActivity() {
     private lateinit var btCandidato3 : Button
     private lateinit var btCandidato4 : Button
     private lateinit var btCandidato5 : Button
-    private lateinit var btVotar : Button
+    private lateinit var btVotarCandidatos : Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,7 +27,7 @@ class CandidatosActivity : AppCompatActivity() {
         btCandidato3 = findViewById(R.id.btCandidato3)
         btCandidato4 = findViewById(R.id.btCandidato4)
         btCandidato5 = findViewById(R.id.btCandidato5)
-        btVotar = findViewById(R.id.btVotar)
+        btVotarCandidatos = findViewById(R.id.btVotarCandidatos)
 
         btVotar.setOnClickListener {
             val intent = Intent(this, ProblemasActivity::class.java)
