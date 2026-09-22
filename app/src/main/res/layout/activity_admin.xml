@@ -7,4 +7,107 @@
     android:layout_height="match_parent"
     tools:context=".AdminActivity">
 
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="52dp"
+        android:layout_marginTop="77dp"
+        android:layout_marginEnd="52dp"
+        android:text="Resultado da Pesquisa"
+        android:textSize="30sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="179dp"
+        android:layout_marginTop="44dp"
+        android:layout_marginEnd="174dp"
+        android:text="Quantidade de pessoas participando:"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.582"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView3" />
+
+    <TextView
+        android:id="@+id/tvQnt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="52dp"
+        android:layout_marginEnd="38dp"
+        android:text="."
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/textView4"
+        app:layout_constraintTop_toBottomOf="@+id/textView3" />
+
+    <Button
+        android:id="@+id/btEleitores"
+        android:layout_width="136dp"
+        android:layout_height="46dp"
+        android:layout_marginStart="160dp"
+        android:layout_marginTop="69dp"
+        android:layout_marginEnd="161dp"
+        android:layout_marginBottom="45dp"
+        android:text="Eleitores"
+        android:textSize="13sp"
+        app:layout_constraintBottom_toTopOf="@+id/btResultado"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView4" />
+
+    <Button
+        android:id="@+id/btResultado"
+        android:layout_width="136dp"
+        android:layout_height="46dp"
+        android:layout_marginStart="160dp"
+        android:layout_marginTop="45dp"
+        android:layout_marginEnd="161dp"
+        android:layout_marginBottom="45dp"
+        android:text="Resultado"
+        android:textSize="13sp"
+        app:layout_constraintBottom_toTopOf="@+id/btLimpar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btEleitores" />
+
+    <Button
+        android:id="@+id/btLimpar"
+        android:layout_width="136dp"
+        android:layout_height="46dp"
+        android:layout_marginStart="137dp"
+        android:layout_marginTop="46dp"
+        android:layout_marginEnd="138dp"
+        android:layout_marginBottom="45dp"
+        android:text="Limpar Dados"
+        android:textSize="13sp"
+        app:layout_constraintBottom_toTopOf="@+id/btRetornar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btResultado" />
+
+    <Button
+        android:id="@+id/btRetornar"
+        android:layout_width="136dp"
+        android:layout_height="46dp"
+        android:layout_marginStart="137dp"
+        android:layout_marginTop="45dp"
+        android:layout_marginEnd="138dp"
+        android:layout_marginBottom="63dp"
+        android:text="Voltar"
+        android:textSize="13sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btLimpar" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

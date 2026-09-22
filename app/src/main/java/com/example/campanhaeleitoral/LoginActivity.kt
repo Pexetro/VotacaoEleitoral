@@ -12,44 +12,45 @@ import androidx.core.view.WindowInsetsCompat
 
 class LoginActivity : AppCompatActivity() {
 
-    private lateinit var btLogin : Button
-    private lateinit var etNome : EditText
-    private lateinit var etSenha : EditText
+    private lateinit var btLogin: Button
+    private lateinit var etNome: EditText
+    private lateinit var etSenha: EditText
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        btLogin = findViewById(R.id.btLogin)
-        etNome = findViewById(R.id.edNome)
-        etSenha = findViewById(R.id.edSenha)
+        super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
+        setContentView(R.layout.activity_login)
 
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
+            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
+            insets
+        }
+
+
+        btLogin = findViewById(R.id.btLogin)
+        etNome = findViewById(R.id.etNome)
+        etSenha = findViewById(R.id.etSenha)
 
         btLogin.setOnClickListener {
             var nome: String
             var senha: String
 
             nome = etNome.getText().toString()
-            senha =etSenha.getText().toString()
+            senha = etSenha.getText().toString()
 
-            if (nome =="Usuario" && senha=="123") {
+            if (nome == "Entrevistador" && senha == "entrevistador") {
                 var respostaActivity: Intent
                 respostaActivity = Intent(this, RespostaActivity::class.java)
                 startActivity(respostaActivity)
-            }else if(nome =="Admin" && senha=="123"){
+            } else if (nome == "Admin" && senha == "admin") {
                 var jogoActivity: Intent
                 jogoActivity = Intent(this, AdminActivity::class.java)
                 startActivity(jogoActivity)
-            }
-            else{
+            } else {
                 Toast.makeText(this, "Login errado", Toast.LENGTH_SHORT).show()
             }
 
-        }
-        super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
-        setContentView(R.layout.activity_login)
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
         }
     }
 }
