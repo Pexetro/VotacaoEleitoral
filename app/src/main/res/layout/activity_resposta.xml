@@ -53,8 +53,8 @@
         android:id="@+id/btVoltarInt"
         android:layout_width="100dp"
         android:layout_height="55dp"
-        android:layout_marginEnd="304dp"
-        android:layout_marginBottom="40dp"
+        android:layout_marginEnd="156dp"
+        android:layout_marginBottom="52dp"
         android:text="Voltar"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
