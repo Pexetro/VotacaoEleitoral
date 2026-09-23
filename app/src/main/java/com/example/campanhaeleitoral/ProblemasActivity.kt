@@ -38,8 +38,8 @@ class ProblemasActivity : AppCompatActivity() {
         btConfirmar = findViewById(R.id.btConfirmar)
 
         btConfirmar.setOnClickListener {
-            val intent = Intent(this, DadosActivity::class.java)
-            startActivity(intent)
+            val intentDados = Intent(this, DadosActivity::class.java)
+            startActivity(intentDados)
         }
 
 

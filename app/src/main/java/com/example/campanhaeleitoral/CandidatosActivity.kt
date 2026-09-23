@@ -12,13 +12,6 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 
 class CandidatosActivity : AppCompatActivity() {
-
-    private lateinit var rbCandidato1 : RadioButton
-    private lateinit var rbCandidato2 : RadioButton
-    private lateinit var rbCandidato3 : RadioButton
-    private lateinit var rbCandidato4 : RadioButton
-    private lateinit var rbCandidato5 : RadioButton
-    private lateinit var rbCandidato6 : RadioButton
     private lateinit var rgCandidatos : RadioGroup
     private lateinit var btVotarCandidatos : Button
 
@@ -27,12 +20,7 @@ class CandidatosActivity : AppCompatActivity() {
         enableEdgeToEdge()
         setContentView(R.layout.activity_candidatos)
 
-        rbCandidato1 = findViewById(R.id.rbCandidato1)
-        rbCandidato2 = findViewById(R.id.rbCandidato2)
-        rbCandidato3 = findViewById(R.id.rbCandidato3)
-        rbCandidato4 = findViewById(R.id.rbCandidato4)
-        rbCandidato5 = findViewById(R.id.rbCandidato5)
-        rbCandidato6 = findViewById(R.id.rbCandidato6)
+        rgCandidatos = findViewById(R.id.rgCandidatos)
         btVotarCandidatos = findViewById(R.id.btVotarCandidatos)
 
         btVotarCandidatos.setOnClickListener {

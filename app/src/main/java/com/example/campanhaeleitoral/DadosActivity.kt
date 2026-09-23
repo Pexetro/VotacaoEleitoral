@@ -15,7 +15,7 @@ class DadosActivity : AppCompatActivity() {
     private lateinit var etCelularDados: EditText
 
     private lateinit var btConfirmarDados: Button
-    private lateinit var btFinalizar: EditText
+    private lateinit var btFinalizar: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
