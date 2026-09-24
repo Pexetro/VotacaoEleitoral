@@ -8,8 +8,6 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.room.Room
-import androidx.sqlite.driver.AndroidSQLiteDriver
 
 class DadosActivity : AppCompatActivity() {
 
@@ -32,18 +30,6 @@ class DadosActivity : AppCompatActivity() {
 
 
         btFinalizar.setOnClickListener {
-
-
-
-
-
-
-
-
-
-
-
-
             val intent = Intent(this, RespostaActivity::class.java)
             startActivity(intent)
         }

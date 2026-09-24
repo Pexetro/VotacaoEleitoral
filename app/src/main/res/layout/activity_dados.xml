@@ -1,83 +1,97 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_gravity="center"
+    android:padding="16dp"
     tools:context=".DadosActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        tools:layout_editor_absoluteX="1dp">
+        android:gravity="center_horizontal"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
 
+        <!-- Título -->
         <TextView
-            android:id="@+id/textView3"
             android:layout_width="match_parent"
-            android:layout_height="49dp"
-            android:gravity="center_horizontal"
+            android:layout_height="wrap_content"
+            android:gravity="center"
             android:text="Dados do Entrevistado"
-            android:textSize="24sp" />
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="20dp"/>
 
+        <!-- Nome -->
         <TextView
-            android:id="@+id/textView4"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Nome"
-            android:textSize="20sp" />
+            android:textSize="20sp"/>
 
         <EditText
             android:id="@+id/etNomeDados"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:ems="10"
-            android:inputType="text" />
+            android:hint="Digite o nome"
+            android:inputType="textPersonName"/>
 
+        <!-- Celular -->
         <TextView
-            android:id="@+id/textView5"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Celular"
-            android:textSize="20sp" />
+            android:textSize="20sp"/>
 
         <EditText
             android:id="@+id/etCelularDados"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:ems="10"
-            android:inputType="text" />
+            android:hint="Digite o celular"
+            android:inputType="phone"/>
 
+        <!-- Confirmar dados e obter localização -->
         <Button
             android:id="@+id/btConfirmarDados"
             android:layout_width="match_parent"
-            android:layout_height="66dp"
-            android:text="Confirmar" />
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Confirmar e obter localização"/>
 
+        <!-- Status da localização -->
         <TextView
-            android:id="@+id/textView7"
-            android:layout_width="match_parent"
-            android:layout_height="58dp" />
-
-        <TextView
-            android:id="@+id/textView6"
+            android:id="@+id/tvLocalizacao"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
-            android:text="Essa página salva o local, data e hora em que o formulário foi preenchido para evitar possíveis fraudes"
-            android:textSize="18sp" />
+            android:gravity="center"
+            android:text="Localização ainda não identificada"
+            android:textSize="16sp"
+            android:layout_marginTop="12dp"/>
 
+        <!-- Informação -->
         <TextView
-            android:id="@+id/textView8"
             android:layout_width="match_parent"
-            android:layout_height="58dp" />
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="24dp"
+            android:text="Esta página registra o local, a data e a hora em que o formulário foi preenchido, com o objetivo de evitar possíveis fraudes."
+            android:textSize="16sp"/>
 
+        <!-- Finalizar -->
         <Button
             android:id="@+id/btFinalizar"
             android:layout_width="match_parent"
-            android:layout_height="66dp"
-            android:text="Finalizar" />
+            android:layout_height="wrap_content"
+            android:text="Finalizar"/>
+
     </LinearLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
