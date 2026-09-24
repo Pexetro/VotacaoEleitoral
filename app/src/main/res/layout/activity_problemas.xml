@@ -1,57 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ProblemasActivity">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:padding="20dp">
+        android:padding="20dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Quais problemas você gostaria que fossem resolvidos?"
             android:textSize="20sp"
-            android:layout_marginBottom="16dp"/>
+            android:layout_marginBottom="16dp" />
 
         <CheckBox
             android:id="@+id/cbSaude"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Saúde"/>
+            android:text="Saúde" />
 
         <CheckBox
             android:id="@+id/cbEducacao"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Educação"/>
+            android:text="Educação" />
 
         <CheckBox
             android:id="@+id/cbSeguranca"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Segurança"/>
+            android:text="Segurança" />
 
         <CheckBox
             android:id="@+id/cbTransporte"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Transporte"/>
+            android:text="Transporte" />
 
         <CheckBox
             android:id="@+id/cbDesemprego"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Desemprego"/>
+            android:text="Desemprego" />
 
         <CheckBox
             android:id="@+id/cbOutros"
-            android:layout_width="85dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Outros" />
 
@@ -59,9 +65,8 @@
             android:id="@+id/etProblemas"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:ems="10"
-            android:inputType="text"
-            android:text="Digite os outros problemas" />
+            android:hint="Descreva outros problemas"
+            android:inputType="textCapSentences" />
 
         <Button
             android:id="@+id/btConfirmar"
@@ -70,6 +75,5 @@
             android:text="Confirmar respostas" />
 
     </LinearLayout>
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>
