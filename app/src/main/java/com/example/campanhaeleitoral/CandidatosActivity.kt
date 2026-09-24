@@ -23,20 +23,58 @@ class CandidatosActivity : AppCompatActivity() {
         rgCandidatos = findViewById(R.id.rgCandidatos)
         btVotarCandidatos = findViewById(R.id.btVotarCandidatos)
 
+        // Recebe a intenção da tela anterior
+        val intencaoRecebida =
+            intent.getStringExtra("intencao") ?: ""
+
+
         btVotarCandidatos.setOnClickListener {
+
             val idSelecionado = rgCandidatos.checkedRadioButtonId
 
             if (idSelecionado != -1) {
-                val radioButton = findViewById<RadioButton>(idSelecionado)
-                val textoEscolhido = radioButton.text.toString()
-                Toast.makeText(this, "Escolha: $textoEscolhido", Toast.LENGTH_SHORT).show()
-                val intent = Intent(this, ProblemasActivity::class.java)
-                startActivity(intent)
-            }
-            else{
-                Toast.makeText(this, "Nenhuma opção escolhida", Toast.LENGTH_SHORT).show()
+
+                val radioButton =
+                    findViewById<RadioButton>(idSelecionado)
+
+                val textoEscolhido =
+                    radioButton.text.toString()
+
+                Toast.makeText(
+                    this,
+                    "Escolha: $textoEscolhido",
+                    Toast.LENGTH_SHORT
+                ).show()
+
+                // Vai para a próxima tela
+                val proximaTela = Intent(
+                    this,
+                    ProblemasActivity::class.java
+                )
+
+                // Envia a intenção recebida anteriormente
+                proximaTela.putExtra(
+                    "intencao",
+                    intencaoRecebida
+                )
+
+                // Envia o candidato escolhido
+                proximaTela.putExtra(
+                    "candidato",
+                    textoEscolhido
+                )
+
+                startActivity(proximaTela)
+
+            } else {
+                Toast.makeText(
+                    this,
+                    "Nenhuma opção escolhida",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         }
+
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)

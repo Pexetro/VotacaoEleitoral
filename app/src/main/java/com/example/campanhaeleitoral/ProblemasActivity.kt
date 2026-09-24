@@ -29,6 +29,13 @@ class ProblemasActivity : AppCompatActivity() {
         enableEdgeToEdge()
         setContentView(R.layout.activity_problemas)
 
+        // Recebe os dados da tela anterior
+        val intencaoRecebida =
+            intent.getStringExtra("intencao") ?: ""
+
+        val candidatoRecebido =
+            intent.getStringExtra("candidato") ?: ""
+
         cbSaude = findViewById(R.id.cbSaude)
         cbEducacao = findViewById(R.id.cbEducacao)
         cbSeguranca = findViewById(R.id.cbSeguranca)
@@ -56,7 +63,6 @@ class ProblemasActivity : AppCompatActivity() {
 
             // Verifica o limite de 3 opções
             if (quantidadeMarcada > 3) {
-
                 Toast.makeText(
                     this,
                     "Selecione no máximo 3 problemas!",
@@ -66,13 +72,22 @@ class ProblemasActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
+            if (quantidadeMarcada == 0) {
+                Toast.makeText(
+                    this,
+                    "Selecione pelo menos um problema!",
+                    Toast.LENGTH_SHORT
+                ).show()
+
+                return@setOnClickListener
+            }
+
             // Valida o campo Outros
-            val outroProblema = etProblemas.text.toString().trim()
+            val outroProblema =
+                etProblemas.text.toString().trim()
 
             if (cbOutros.isChecked && outroProblema.isEmpty()) {
-
                 etProblemas.error = "Descreva o problema"
-
                 return@setOnClickListener
             }
 
@@ -97,19 +112,33 @@ class ProblemasActivity : AppCompatActivity() {
             if (cbOutros.isChecked)
                 problemasSelecionados.add("Outros: $outroProblema")
 
-            // Envia os dados para DadosActivity
-            val intent = Intent(
+            // Cria o Intent para DadosActivity
+            val proximaTela = Intent(
                 this,
                 DadosActivity::class.java
             )
 
-            intent.putStringArrayListExtra(
+            // Encaminha a intenção
+            proximaTela.putExtra(
+                "intencao",
+                intencaoRecebida
+            )
+
+            // Encaminha o candidato
+            proximaTela.putExtra(
+                "candidato",
+                candidatoRecebido
+            )
+
+            // Encaminha os problemas selecionados
+            proximaTela.putStringArrayListExtra(
                 "problemas",
                 ArrayList(problemasSelecionados)
             )
 
-            startActivity(intent)
+            startActivity(proximaTela)
         }
+
 
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->

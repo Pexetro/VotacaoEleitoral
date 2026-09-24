@@ -28,8 +28,20 @@ class RespostaActivity : AppCompatActivity() {
 
         btVoltarInt = findViewById(R.id.btVoltarInt)
 
+
         btIntencao.setOnClickListener {
+
+            val intencao = etIntencao.text.toString().trim()
+
+            if (intencao.isEmpty()) {
+                etIntencao.error = "Digite sua intenção"
+                return@setOnClickListener
+            }
+
             val intent = Intent(this, CandidatosActivity::class.java)
+
+            intent.putExtra("intencao", intencao)
+
             startActivity(intent)
         }
 
