@@ -39,6 +39,7 @@ class ProblemasActivity : AppCompatActivity() {
         btConfirmar = findViewById(R.id.btConfirmar)
 
         btConfirmar.setOnClickListener {
+<<<<<<< HEAD
 
             val checkBoxes = listOf(
                 cbSaude,
@@ -109,6 +110,10 @@ class ProblemasActivity : AppCompatActivity() {
             )
 
             startActivity(intent)
+=======
+            val intentDados = Intent(this, DadosActivity::class.java)
+            startActivity(intentDados)
+>>>>>>> main
         }
 
 
