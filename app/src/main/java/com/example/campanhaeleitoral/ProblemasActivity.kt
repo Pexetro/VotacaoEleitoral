@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.CheckBox
 import android.widget.EditText
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -38,7 +39,75 @@ class ProblemasActivity : AppCompatActivity() {
         btConfirmar = findViewById(R.id.btConfirmar)
 
         btConfirmar.setOnClickListener {
-            val intent = Intent(this, DadosActivity::class.java)
+
+            val checkBoxes = listOf(
+                cbSaude,
+                cbEducacao,
+                cbSeguranca,
+                cbTransporte,
+                cbDesemprego,
+                cbOutros
+            )
+
+            // Conta os CheckBoxes marcados
+            val quantidadeMarcada = checkBoxes.count {
+                it.isChecked
+            }
+
+            // Verifica o limite de 3 opções
+            if (quantidadeMarcada > 3) {
+
+                Toast.makeText(
+                    this,
+                    "Selecione no máximo 3 problemas!",
+                    Toast.LENGTH_SHORT
+                ).show()
+
+                return@setOnClickListener
+            }
+
+            // Valida o campo Outros
+            val outroProblema = etProblemas.text.toString().trim()
+
+            if (cbOutros.isChecked && outroProblema.isEmpty()) {
+
+                etProblemas.error = "Descreva o problema"
+
+                return@setOnClickListener
+            }
+
+            // Cria a lista dos problemas selecionados
+            val problemasSelecionados = mutableListOf<String>()
+
+            if (cbSaude.isChecked)
+                problemasSelecionados.add("Saúde")
+
+            if (cbEducacao.isChecked)
+                problemasSelecionados.add("Educação")
+
+            if (cbSeguranca.isChecked)
+                problemasSelecionados.add("Segurança")
+
+            if (cbTransporte.isChecked)
+                problemasSelecionados.add("Transporte")
+
+            if (cbDesemprego.isChecked)
+                problemasSelecionados.add("Desemprego")
+
+            if (cbOutros.isChecked)
+                problemasSelecionados.add("Outros: $outroProblema")
+
+            // Envia os dados para DadosActivity
+            val intent = Intent(
+                this,
+                DadosActivity::class.java
+            )
+
+            intent.putStringArrayListExtra(
+                "problemas",
+                ArrayList(problemasSelecionados)
+            )
+
             startActivity(intent)
         }
 
