@@ -17,7 +17,10 @@ public interface EntrevistadoDao {
         void insertall(Entrevistado...entevistados);
 
         @Delete
-       void delete(Entrevistado entrevistado);
+        void delete(Entrevistado entrevistado);
+
+        @Query("SELECT COUNT(id) FROM entrevistado")
+        int contarEntrevistados();
 
 }
 

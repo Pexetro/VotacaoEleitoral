@@ -1,6 +1,7 @@
 package com.example.campanhaeleitoral
 
 import android.Manifest
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.widget.Button
@@ -39,14 +40,7 @@ class DadosActivity : AppCompatActivity() {
     private var candidatoRecebido: String = ""
     private var problemasRecebidos: ArrayList<String> = arrayListOf()
 
-    private val banco by lazy {
-        Room.databaseBuilder(
-            applicationContext,
-            AppDatabase::class.java,
-            "banco_entrevistados"
-        )
-            .build()
-    }
+
 
     private val fusedLocationClient by lazy {
         LocationServices.getFusedLocationProviderClient(this)
@@ -236,7 +230,10 @@ class DadosActivity : AppCompatActivity() {
             lifecycleScope.launch {
                 try {
                     withContext(Dispatchers.IO) {
-                        banco.entrevistadoDao().insertall(entrevistado)
+                        // Usa o singleton do AppDatabase (garante que é o mesmo banco da AdminActivity)
+                        AppDatabase.getDatabase(applicationContext)
+                            .entrevistadoDao()
+                            .insertall(entrevistado)
                     }
 
                     Toast.makeText(
@@ -245,7 +242,10 @@ class DadosActivity : AppCompatActivity() {
                         Toast.LENGTH_LONG
                     ).show()
 
-                    // Encerra a tela após salvar
+                    val intentMain = Intent(this@DadosActivity, MainActivity::class.java)
+                    intentMain.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP)
+                    val intentResposta = Intent(this@DadosActivity, RespostaActivity::class.java)
+                    startActivities(arrayOf(intentMain, intentResposta))
                     finish()
 
                 } catch (e: Exception) {
