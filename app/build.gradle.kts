@@ -50,4 +50,6 @@ dependencies {
     val room_version = "3.0.3"
     implementation("androidx.room3:room3-runtime:$room_version")
     ksp("androidx.room3:room3-compiler:$room_version")
+
+    implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
 }

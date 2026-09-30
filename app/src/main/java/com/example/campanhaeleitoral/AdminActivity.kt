@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.content.Intent
 import android.widget.Button
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -48,26 +49,39 @@ class AdminActivity : AppCompatActivity() {
             startActivity(resultadoActivity)
         }
         btLimpar.setOnClickListener {
-
+        clearAllTables()
         }
         btVoltar.setOnClickListener {
             finish()
         }
     }
-        override fun onResume() {
-            super.onResume()
-            carregarTotalDeEntrevistados()
+
+    override fun onResume() {
+        super.onResume()
+        carregarTotalDeEntrevistados()
+    }
+
+    private fun carregarTotalDeEntrevistados() {
+        lifecycleScope.launch(Dispatchers.IO) {
+            val total = AppDatabase.getDatabase(this@AdminActivity)
+                .entrevistadoDao()
+                .contarEntrevistados()
+
+            withContext(Dispatchers.Main) {
+                tvTotalEntrevistados.text = "$total"
+            }
         }
 
-        private fun carregarTotalDeEntrevistados() {
-            lifecycleScope.launch(Dispatchers.IO) {
-                val total = AppDatabase.getDatabase(this@AdminActivity)
-                    .entrevistadoDao()
-                    .contarEntrevistados()
+    }
 
-                withContext(Dispatchers.Main) {
-                    tvTotalEntrevistados.text = "$total"
-                }
+    private fun clearAllTables() {
+        lifecycleScope.launch(Dispatchers.IO) {
+            AppDatabase.getDatabase(this@AdminActivity).clearAllTables()
+            withContext(Dispatchers.Main) {
+                tvTotalEntrevistados.text = "0"
+                Toast.makeText(this@AdminActivity, "Dados limpos com sucesso!", Toast.LENGTH_SHORT)
+                    .show()
             }
         }
     }
+}

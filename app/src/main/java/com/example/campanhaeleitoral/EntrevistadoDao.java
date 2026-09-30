@@ -7,6 +7,8 @@ import androidx.room.Query;
 
 import java.util.List;
 
+import kotlinx.coroutines.flow.Flow;
+
 @Dao
 public interface EntrevistadoDao {
 
@@ -16,11 +18,11 @@ public interface EntrevistadoDao {
         @Insert
         void insertall(Entrevistado...entevistados);
 
-        @Delete
-        void delete(Entrevistado entrevistado);
-
         @Query("SELECT COUNT(id) FROM entrevistado")
         int contarEntrevistados();
+
+        @Query("SELECT voto AS candidato, COUNT(id) AS quantidadeVotos FROM entrevistado GROUP BY voto")
+        List<VotoCandidato> obterResultadoPesquisa();
 
 }
 
