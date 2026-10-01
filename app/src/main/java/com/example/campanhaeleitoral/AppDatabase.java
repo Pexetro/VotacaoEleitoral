@@ -5,7 +5,7 @@ import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 
-@Database(entities = {Entrevistado.class}, version = 1)
+@Database(entities = {Entrevistado.class}, version = 2)
 public abstract class AppDatabase extends RoomDatabase {
 
     public abstract EntrevistadoDao entrevistadoDao();
@@ -19,7 +19,8 @@ public abstract class AppDatabase extends RoomDatabase {
                             context.getApplicationContext(),
                             AppDatabase.class,
                             "Entrevistado"
-                    ).build();
+                    ).fallbackToDestructiveMigration()
+                            .build();
                 }
             }
         }
