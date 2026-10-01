@@ -13,16 +13,19 @@ import androidx.core.view.WindowInsetsCompat
 
 class ProblemasActivity : AppCompatActivity() {
 
-    private lateinit var cbSaude : CheckBox
-    private lateinit var cbEducacao : CheckBox
-    private lateinit var cbSeguranca : CheckBox
-    private lateinit var cbTransporte : CheckBox
-    private lateinit var cbDesemprego : CheckBox
-    private lateinit var cbOutros : CheckBox
+    private lateinit var cbSaude: CheckBox
+    private lateinit var cbEducacao: CheckBox
+    private lateinit var cbSeguranca: CheckBox
+    private lateinit var cbTransporte: CheckBox
+    private lateinit var cbDesemprego: CheckBox
+    private lateinit var cbMoradia: CheckBox
+    private lateinit var cbSaneamento: CheckBox
+    private lateinit var cbMeioAmbiente: CheckBox
+    private lateinit var cbInfraestrutura: CheckBox
+    private lateinit var cbOutros: CheckBox
 
     private lateinit var etProblemas: EditText
-
-    private lateinit var btConfirmar : Button
+    private lateinit var btConfirmar: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,23 +39,34 @@ class ProblemasActivity : AppCompatActivity() {
         val candidatoRecebido =
             intent.getStringExtra("candidato") ?: ""
 
+        // Inicializa os CheckBoxes
         cbSaude = findViewById(R.id.cbSaude)
         cbEducacao = findViewById(R.id.cbEducacao)
         cbSeguranca = findViewById(R.id.cbSeguranca)
         cbTransporte = findViewById(R.id.cbTransporte)
         cbDesemprego = findViewById(R.id.cbDesemprego)
+        cbMoradia = findViewById(R.id.cbMoradia)
+        cbSaneamento = findViewById(R.id.cbSaneamento)
+        cbMeioAmbiente = findViewById(R.id.cbMeioAmbiente)
+        cbInfraestrutura = findViewById(R.id.cbInfraestrutura)
         cbOutros = findViewById(R.id.cbOutros)
+
         etProblemas = findViewById(R.id.etProblemas)
         btConfirmar = findViewById(R.id.btConfirmar)
 
         btConfirmar.setOnClickListener {
 
+            // Lista todos os CheckBoxes
             val checkBoxes = listOf(
                 cbSaude,
                 cbEducacao,
                 cbSeguranca,
                 cbTransporte,
                 cbDesemprego,
+                cbMoradia,
+                cbSaneamento,
+                cbMeioAmbiente,
+                cbInfraestrutura,
                 cbOutros
             )
 
@@ -72,6 +86,7 @@ class ProblemasActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
+            // Verifica se pelo menos uma opção foi marcada
             if (quantidadeMarcada == 0) {
                 Toast.makeText(
                     this,
@@ -109,6 +124,18 @@ class ProblemasActivity : AppCompatActivity() {
             if (cbDesemprego.isChecked)
                 problemasSelecionados.add("Desemprego")
 
+            if (cbMoradia.isChecked)
+                problemasSelecionados.add("Moradia")
+
+            if (cbSaneamento.isChecked)
+                problemasSelecionados.add("Saneamento básico")
+
+            if (cbMeioAmbiente.isChecked)
+                problemasSelecionados.add("Meio ambiente")
+
+            if (cbInfraestrutura.isChecked)
+                problemasSelecionados.add("Infraestrutura")
+
             if (cbOutros.isChecked)
                 problemasSelecionados.add("Outros: $outroProblema")
 
@@ -139,11 +166,22 @@ class ProblemasActivity : AppCompatActivity() {
             startActivity(proximaTela)
         }
 
+        // Configuração das margens da tela
+        ViewCompat.setOnApplyWindowInsetsListener(
+            findViewById(R.id.main)
+        ) { v, insets ->
 
+            val systemBars = insets.getInsets(
+                WindowInsetsCompat.Type.systemBars()
+            )
 
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
+            v.setPadding(
+                systemBars.left,
+                systemBars.top,
+                systemBars.right,
+                systemBars.bottom
+            )
+
             insets
         }
     }

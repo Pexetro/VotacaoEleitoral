@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:layout_marginBottom="12dp"
+    android:background="#FFFFFF"
+    android:elevation="3dp">
+
+    <TextView
+        android:id="@+id/tvNome"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Nome do entrevistado"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:textColor="#000000"
+        android:paddingBottom="8dp" />
+
+    <TextView
+        android:id="@+id/tvCelular"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Celular:"
+        android:textSize="15sp"
+        android:textColor="#444444"
+        android:paddingBottom="5dp" />
+
+    <TextView
+        android:id="@+id/tvCidade"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Cidade:"
+        android:textSize="15sp"
+        android:textColor="#444444"
+        android:paddingBottom="5dp" />
+
+    <TextView
+        android:id="@+id/tvDataHora"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Data e hora:"
+        android:textSize="15sp"
+        android:textColor="#444444"
+        android:paddingBottom="5dp" />
+
+    <TextView
+        android:id="@+id/tvLatitude"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Latitude:"
+        android:textSize="15sp"
+        android:textColor="#444444"
+        android:paddingBottom="5dp" />
+
+    <TextView
+        android:id="@+id/tvLongitude"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Longitude:"
+        android:textSize="15sp"
+        android:textColor="#444444" />
+
+</LinearLayout>
+

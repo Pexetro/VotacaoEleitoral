@@ -63,6 +63,10 @@
             android:name=".ResultadoActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
+
+        <activity
+            android:name=".EleitoresActivity"
+            android:exported="false" />
     </application>
 
 </manifest>

@@ -46,6 +46,7 @@ dependencies {
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(libs.androidx.junit)
     annotationProcessor(libs.androidx.room.compiler)
+    implementation("androidx.recyclerview:recyclerview:1.4.0")
 
     val room_version = "3.0.3"
     implementation("androidx.room3:room3-runtime:$room_version")

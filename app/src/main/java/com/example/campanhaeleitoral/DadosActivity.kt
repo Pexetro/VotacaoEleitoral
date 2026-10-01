@@ -22,6 +22,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import androidx.room.Room
+import java.io.IOException
+import android.location.Geocoder
+import java.util.Locale
 
 class DadosActivity : AppCompatActivity() {
 
@@ -225,12 +228,36 @@ class DadosActivity : AppCompatActivity() {
                 this.intencao = intencaoRecebida
                 this.latitude = latitude
                 this.longitude = longitude
+                this.dataHora = System.currentTimeMillis()
             }
 
             lifecycleScope.launch {
                 try {
                     withContext(Dispatchers.IO) {
-                        // Usa o singleton do AppDatabase (garante que é o mesmo banco da AdminActivity)
+
+                        val geocoder = Geocoder(
+                            this@DadosActivity,
+                            Locale.getDefault()
+                        )
+
+                        val cidade = try {
+
+                            @Suppress("DEPRECATION")
+                            val enderecos = geocoder.getFromLocation(
+                                latitude!!,
+                                longitude!!,
+                                1
+                            )
+
+                            enderecos?.firstOrNull()?.locality
+                                ?: "Não identificada"
+
+                        } catch (e: IOException) {
+                            "Não identificada"
+                        }
+
+                        entrevistado.cidade = cidade
+
                         AppDatabase.getDatabase(applicationContext)
                             .entrevistadoDao()
                             .insertall(entrevistado)

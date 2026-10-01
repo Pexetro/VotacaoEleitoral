@@ -1,20 +1,58 @@
 package com.example.campanhaeleitoral
 
 import android.os.Bundle
-import androidx.activity.enableEdgeToEdge
+import android.view.View
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
+import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class EleitoresActivity : AppCompatActivity() {
+
+    private lateinit var rvEntrevistados: RecyclerView
+    private lateinit var tvNenhumRegistro: TextView
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         setContentView(R.layout.activity_eleitores)
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
+
+        rvEntrevistados = findViewById(R.id.rvEntrevistados)
+        tvNenhumRegistro = findViewById(R.id.tvNenhumRegistro)
+
+        rvEntrevistados.layoutManager =
+            LinearLayoutManager(this)
+
+        carregarEntrevistados()
+    }
+
+    private fun carregarEntrevistados() {
+
+        lifecycleScope.launch {
+
+            val entrevistados = withContext(Dispatchers.IO) {
+
+                AppDatabase.getDatabase(applicationContext)
+                    .entrevistadoDao()
+                    .listar()
+            }
+
+            if (entrevistados.isEmpty()) {
+
+                tvNenhumRegistro.visibility = View.VISIBLE
+                rvEntrevistados.visibility = View.GONE
+
+            } else {
+
+                tvNenhumRegistro.visibility = View.GONE
+                rvEntrevistados.visibility = View.VISIBLE
+
+                rvEntrevistados.adapter =
+                    EleitorAdapter(entrevistados)
+            }
         }
     }
 }

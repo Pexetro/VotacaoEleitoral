@@ -56,6 +56,30 @@
             android:text="Desemprego" />
 
         <CheckBox
+            android:id="@+id/cbMoradia"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Moradia" />
+
+        <CheckBox
+            android:id="@+id/cbSaneamento"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Saneamento básico" />
+
+        <CheckBox
+            android:id="@+id/cbMeioAmbiente"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Meio ambiente" />
+
+        <CheckBox
+            android:id="@+id/cbInfraestrutura"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Infraestrutura" />
+
+        <CheckBox
             android:id="@+id/cbOutros"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

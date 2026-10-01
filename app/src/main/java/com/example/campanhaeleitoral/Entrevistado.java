@@ -31,6 +31,12 @@ public class Entrevistado {
     @ColumnInfo(name = "longitude")
     public Double longitude;
 
+    @ColumnInfo(name = "data_hora")
+    public long dataHora;
+
+    @ColumnInfo(name = "cidade")
+    public String cidade = "";
+
 }
 
 

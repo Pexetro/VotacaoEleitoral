@@ -12,7 +12,7 @@ import kotlinx.coroutines.flow.Flow;
 @Dao
 public interface EntrevistadoDao {
 
-        @Query("SELECT * FROM entrevistado")
+        @Query("SELECT * FROM entrevistado ORDER BY data_hora DESC")
         List<Entrevistado> listar();
 
         @Insert
@@ -23,6 +23,8 @@ public interface EntrevistadoDao {
 
         @Query("SELECT voto AS candidato, COUNT(id) AS quantidadeVotos FROM entrevistado GROUP BY voto")
         List<VotoCandidato> obterResultadoPesquisa();
+
+
 
 }
 
