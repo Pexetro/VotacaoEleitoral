@@ -3,34 +3,31 @@ package com.example.campanhaeleitoral
 import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.location.Geocoder
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
-import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.lifecycle.lifecycleScope
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.Priority
 import com.google.android.gms.tasks.CancellationTokenSource
-import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import androidx.room.Room
 import java.io.IOException
-import android.location.Geocoder
 import java.util.Locale
 
 class DadosActivity : AppCompatActivity() {
 
     private lateinit var etNomeDados: EditText
     private lateinit var etCelularDados: EditText
-
     private lateinit var btConfirmarDados: Button
     private lateinit var btFinalizar: Button
     private lateinit var tvLocalizacao: TextView
@@ -38,73 +35,126 @@ class DadosActivity : AppCompatActivity() {
     private var latitude: Double? = null
     private var longitude: Double? = null
 
-    // Recebe os dados das telas anteriores
     private var intencaoRecebida: String = ""
     private var candidatoRecebido: String = ""
     private var problemasRecebidos: ArrayList<String> = arrayListOf()
-
-
 
     private val fusedLocationClient by lazy {
         LocationServices.getFusedLocationProviderClient(this)
     }
 
-    // Solicita a permissão de localização
-    private val solicitarPermissao =
+    private val solicitarPermissaoLocalizacao =
         registerForActivityResult(
             ActivityResultContracts.RequestMultiplePermissions()
         ) { permissoes ->
 
-            val permitida =
+            val permissaoConcedida =
                 permissoes[Manifest.permission.ACCESS_FINE_LOCATION] == true ||
                         permissoes[Manifest.permission.ACCESS_COARSE_LOCATION] == true
 
-            if (permitida) {
+            if (permissaoConcedida) {
                 obterLocalizacao()
             } else {
-                tvLocalizacao.text = "Permissão de localização negada"
-
                 Toast.makeText(
                     this,
-                    "Permissão de localização negada",
-                    Toast.LENGTH_LONG
+                    "Permissão de localização negada.",
+                    Toast.LENGTH_SHORT
                 ).show()
             }
         }
 
-    // Verifica a permissão e obtém a localização
-    private fun obterLocalizacao() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_dados)
 
-        val precisa = ContextCompat.checkSelfPermission(
+        etNomeDados = findViewById(R.id.etNomeDados)
+        etCelularDados = findViewById(R.id.etCelularDados)
+        btConfirmarDados = findViewById(R.id.btConfirmarDados)
+        btFinalizar = findViewById(R.id.btFinalizar)
+        tvLocalizacao = findViewById(R.id.tvLocalizacao)
+
+        intencaoRecebida = intent.getStringExtra("intencao") ?: ""
+        candidatoRecebido = intent.getStringExtra("candidato") ?: ""
+        problemasRecebidos =
+            intent.getStringArrayListExtra("problemas") ?: arrayListOf()
+
+        btConfirmarDados.setOnClickListener {
+            verificarPermissaoLocalizacao()
+        }
+
+        btFinalizar.setOnClickListener {
+            finalizarCadastro()
+        }
+
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { view, insets ->
+            val systemBars =
+                insets.getInsets(WindowInsetsCompat.Type.systemBars())
+
+            view.setPadding(
+                systemBars.left,
+                systemBars.top,
+                systemBars.right,
+                systemBars.bottom
+            )
+
+            insets
+        }
+    }
+
+    private fun verificarPermissaoLocalizacao() {
+
+        val permissaoPrecisao = ContextCompat.checkSelfPermission(
             this,
             Manifest.permission.ACCESS_FINE_LOCATION
         ) == PackageManager.PERMISSION_GRANTED
 
-        val aproximada = ContextCompat.checkSelfPermission(
+        val permissaoAproximada = ContextCompat.checkSelfPermission(
             this,
             Manifest.permission.ACCESS_COARSE_LOCATION
         ) == PackageManager.PERMISSION_GRANTED
 
-        // Se não houver permissão, solicita ao usuário
-        if (!precisa && !aproximada) {
-            solicitarPermissao.launch(
+        if (permissaoPrecisao || permissaoAproximada) {
+            obterLocalizacao()
+        } else {
+            solicitarPermissaoLocalizacao.launch(
                 arrayOf(
                     Manifest.permission.ACCESS_FINE_LOCATION,
                     Manifest.permission.ACCESS_COARSE_LOCATION
                 )
             )
+        }
+    }
+
+    private fun obterLocalizacao() {
+
+        val permissaoPrecisao = ContextCompat.checkSelfPermission(
+            this,
+            Manifest.permission.ACCESS_FINE_LOCATION
+        ) == PackageManager.PERMISSION_GRANTED
+
+        val permissaoAproximada = ContextCompat.checkSelfPermission(
+            this,
+            Manifest.permission.ACCESS_COARSE_LOCATION
+        ) == PackageManager.PERMISSION_GRANTED
+
+        if (!permissaoPrecisao && !permissaoAproximada) {
+            Toast.makeText(
+                this,
+                "Permissão de localização não concedida.",
+                Toast.LENGTH_SHORT
+            ).show()
             return
         }
 
         tvLocalizacao.text = "Obtendo localização..."
 
-        try {
-            val prioridade = if (precisa) {
-                Priority.PRIORITY_HIGH_ACCURACY
-            } else {
-                Priority.PRIORITY_BALANCED_POWER_ACCURACY
-            }
+        val prioridade = if (permissaoPrecisao) {
+            Priority.PRIORITY_HIGH_ACCURACY
+        } else {
+            Priority.PRIORITY_BALANCED_POWER_ACCURACY
+        }
 
+        try {
             fusedLocationClient.getCurrentLocation(
                 prioridade,
                 CancellationTokenSource().token
@@ -127,180 +177,155 @@ class DadosActivity : AppCompatActivity() {
                     ).show()
 
                 } else {
-                    tvLocalizacao.text =
-                        "Não foi possível obter a localização."
+                    tvLocalizacao.text = "Não foi possível obter a localização."
 
                     Toast.makeText(
                         this,
-                        "Verifique se a localização do aparelho está ativada e tente novamente.",
-                        Toast.LENGTH_LONG
+                        "Localização não encontrada.",
+                        Toast.LENGTH_SHORT
                     ).show()
                 }
 
-            }.addOnFailureListener {
+            }.addOnFailureListener { erro ->
 
-                tvLocalizacao.text =
-                    "Erro ao obter localização."
+                tvLocalizacao.text = "Erro ao obter localização."
 
                 Toast.makeText(
                     this,
-                    "Erro ao obter localização",
-                    Toast.LENGTH_LONG
+                    "Erro: ${erro.message}",
+                    Toast.LENGTH_SHORT
                 ).show()
             }
 
         } catch (e: SecurityException) {
-
-            tvLocalizacao.text =
-                "Permissão de localização não concedida."
-
             Toast.makeText(
                 this,
-                "Permissão de localização não concedida",
-                Toast.LENGTH_LONG
+                "Permissão de localização não concedida.",
+                Toast.LENGTH_SHORT
             ).show()
         }
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
-        setContentView(R.layout.activity_dados)
+    private fun finalizarCadastro() {
 
-        // Recebe os dados enviados pelas telas anteriores
-        intencaoRecebida =
-            intent.getStringExtra("intencao") ?: ""
+        val nome = etNomeDados.text.toString().trim()
+        val telefone = etCelularDados.text.toString().trim()
 
-        candidatoRecebido =
-            intent.getStringExtra("candidato") ?: ""
-
-        problemasRecebidos =
-            intent.getStringArrayListExtra("problemas")
-                ?: arrayListOf()
-
-        // Inicializa os componentes do XML
-        etNomeDados = findViewById(R.id.etNomeDados)
-        etCelularDados = findViewById(R.id.etCelularDados)
-
-        btConfirmarDados = findViewById(R.id.btConfirmarDados)
-        btFinalizar = findViewById(R.id.btFinalizar)
-        tvLocalizacao = findViewById(R.id.tvLocalizacao)
-
-        // Ao clicar, solicita a localização
-        btConfirmarDados.setOnClickListener {
-            obterLocalizacao()
+        if (nome.isEmpty()) {
+            etNomeDados.error = "Digite o nome"
+            return
         }
 
-        // Valida os dados antes de prosseguir
-        btFinalizar.setOnClickListener {
+        if (telefone.isEmpty()) {
+            etCelularDados.error = "Digite o celular"
+            return
+        }
 
-            val nome = etNomeDados.text.toString().trim()
-            val telefone = etCelularDados.text.toString().trim()
+        if (latitude == null || longitude == null) {
+            Toast.makeText(
+                this,
+                "Obtenha a localização antes de finalizar.",
+                Toast.LENGTH_SHORT
+            ).show()
+            return
+        }
 
-            if (nome.isEmpty()) {
-                etNomeDados.error = "Digite o nome"
-                return@setOnClickListener
-            }
+        val latitudeCapturada = latitude!!
+        val longitudeCapturada = longitude!!
 
-            if (telefone.isEmpty()) {
-                etCelularDados.error = "Digite o celular"
-                return@setOnClickListener
-            }
+        val problemas = problemasRecebidos.joinToString(", ")
 
-            if (latitude == null || longitude == null) {
-                Toast.makeText(
-                    this,
-                    "Obtenha a localização antes de finalizar.",
-                    Toast.LENGTH_LONG
-                ).show()
-                return@setOnClickListener
-            }
+        val entrevistado = Entrevistado().apply {
+            this.nome = nome
+            this.telefone = telefone
+            this.voto = candidatoRecebido
+            this.problema = problemas
+            this.intencao = intencaoRecebida
+            this.latitude = latitudeCapturada
+            this.longitude = longitudeCapturada
+            this.dataHora = System.currentTimeMillis()
+        }
 
-            // Junta os problemas selecionados
-            val problemas = problemasRecebidos.joinToString(", ")
+        btFinalizar.isEnabled = false
 
-            // Cria o objeto que será salvo no Room
-            val entrevistado = Entrevistado().apply {
-                this.nome = nome
-                this.telefone = telefone
-                this.voto = candidatoRecebido
-                this.problema = problemas
-                this.intencao = intencaoRecebida
-                this.latitude = latitude
-                this.longitude = longitude
-                this.dataHora = System.currentTimeMillis()
-            }
+        lifecycleScope.launch {
 
-            lifecycleScope.launch {
-                try {
-                    withContext(Dispatchers.IO) {
+            try {
+                withContext(Dispatchers.IO) {
 
-                        val geocoder = Geocoder(
-                            this@DadosActivity,
-                            Locale.getDefault()
+                    val geocoder = Geocoder(
+                        this@DadosActivity,
+                        Locale.getDefault()
+                    )
+
+                    val cidade = try {
+                        @Suppress("DEPRECATION")
+                        val enderecos = geocoder.getFromLocation(
+                            latitudeCapturada,
+                            longitudeCapturada,
+                            1
                         )
 
-                        val cidade = try {
+                        enderecos?.firstOrNull()?.let { endereco ->
+                            endereco.locality
+                                ?: endereco.subAdminArea
+                        } ?: "Não identificada"
 
-                            @Suppress("DEPRECATION")
-                            val enderecos = geocoder.getFromLocation(
-                                latitude!!,
-                                longitude!!,
-                                1
-                            )
-
-                            enderecos?.firstOrNull()?.locality
-                                ?: "Não identificada"
-
-                        } catch (e: IOException) {
-                            "Não identificada"
-                        }
-
-                        entrevistado.cidade = cidade
-
-                        AppDatabase.getDatabase(applicationContext)
-                            .entrevistadoDao()
-                            .insertall(entrevistado)
+                    } catch (e: IOException) {
+                        "Não identificada"
+                    } catch (e: Exception) {
+                        "Não identificada"
                     }
 
-                    Toast.makeText(
-                        this@DadosActivity,
-                        "Entrevista salva com sucesso!",
-                        Toast.LENGTH_LONG
-                    ).show()
+                    entrevistado.cidade = cidade
 
-                    val intentMain = Intent(this@DadosActivity, MainActivity::class.java)
-                    intentMain.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP)
-                    val intentResposta = Intent(this@DadosActivity, RespostaActivity::class.java)
-                    startActivities(arrayOf(intentMain, intentResposta))
-                    finish()
+                    android.util.Log.d(
+                        "DADOS_ENTREVISTADO",
+                        """
+                        Nome: ${entrevistado.nome}
+                        Cidade: ${entrevistado.cidade}
+                        Latitude: ${entrevistado.latitude}
+                        Longitude: ${entrevistado.longitude}
+                        """.trimIndent()
+                    )
 
-                } catch (e: Exception) {
-                    Toast.makeText(
-                        this@DadosActivity,
-                        "Erro ao salvar: ${e.message}",
-                        Toast.LENGTH_LONG
-                    ).show()
+                    AppDatabase.getDatabase(applicationContext)
+                        .entrevistadoDao()
+                        .insertall(entrevistado)
                 }
+
+                Toast.makeText(
+                    this@DadosActivity,
+                    "Entrevistado cadastrado com sucesso!",
+                    Toast.LENGTH_SHORT
+                ).show()
+
+                val intentMain = Intent(
+                    this@DadosActivity,
+                    MainActivity::class.java
+                )
+
+                val intentResposta = Intent(
+                    this@DadosActivity,
+                    RespostaActivity::class.java
+                )
+
+                startActivities(
+                    arrayOf(intentMain, intentResposta)
+                )
+
+                finish()
+
+            } catch (e: Exception) {
+
+                btFinalizar.isEnabled = true
+
+                Toast.makeText(
+                    this@DadosActivity,
+                    "Erro ao salvar: ${e.message}",
+                    Toast.LENGTH_LONG
+                ).show()
             }
-        }
-
-        // Ajusta a tela para as barras do sistema
-        ViewCompat.setOnApplyWindowInsetsListener(
-            findViewById(R.id.main)
-        ) { v, insets ->
-
-            val systemBars =
-                insets.getInsets(WindowInsetsCompat.Type.systemBars())
-
-            v.setPadding(
-                systemBars.left,
-                systemBars.top,
-                systemBars.right,
-                systemBars.bottom
-            )
-
-            insets
         }
     }
 }
